@@ -24,7 +24,7 @@
 
 $DownloadUrl = "https://github.com/fox-it/log4j-finder/releases/latest/download/log4j-finder.exe"
 $FolderRmm = "Fox-IT_Log4J-Finder_Script"
-$PathRmm = [System.IO.FileInfo]"$( $env:ProgramFiles )\Advanced Monitoring Agent\scripts\$( $FolderRmm )"
+$PathRmm = [System.IO.FileInfo]"$( ${env:ProgramFiles(x86)} )\Advanced Monitoring Agent\scripts\$( $FolderRmm )"
 if (-not (Test-Path $PathRmm.DirectoryName)) {
     New-Item -ItemType Directory -Name $FolderRmm -Path $PathRmm
 }
@@ -38,9 +38,9 @@ if (Test-Path $PathExe) {
 
 $Drives = (Get-PSDrive -PSProvider FileSystem).where({$_.DisplayRoot -notlike "\\*"})
 
-$Args = ""
+$Arguments = ""
 foreach ($drive in $Drives) {
-    $Args = "$( $Args ) $( $drive ):\ "
+    $Arguments = "$( $Arguments ) $( $drive ):\ "
 }
 
 $pinfo = New-Object System.Diagnostics.ProcessStartInfo
@@ -48,7 +48,7 @@ $pinfo.FileName = $PathExe
 $pinfo.RedirectStandardError = $true
 $pinfo.RedirectStandardOutput = $true
 $pinfo.UseShellExecute = $false
-$pinfo.Arguments = $Args
+$pinfo.Arguments = $Arguments
 $p = New-Object System.Diagnostics.Process
 $p.StartInfo = $pinfo
 $p.Start() | Out-Null
