@@ -37,13 +37,19 @@ $AllProtocols = [System.Net.SecurityProtocolType]'Tls11,Tls12'
 $Client = New-Object System.Net.WebClient
 $Client.DownloadFile($DownloadUrl, $PathExe)
 
-$drives = Get-PSDrive -PSProvider FileSystem
+$Drives = (Get-PSDrive -PSProvider FileSystem).where({$_.DisplayRoot -notlike "\\*"})
+
+$Args = ""
+foreach ($drive in $Drives) {
+    $Args = "$( $Args ) $( $drive ):\ "
+}
 
 $pinfo = New-Object System.Diagnostics.ProcessStartInfo
 $pinfo.FileName = $PathExe
 $pinfo.RedirectStandardError = $true
 $pinfo.RedirectStandardOutput = $true
 $pinfo.UseShellExecute = $false
+$pinfo.Arguments = $Args
 $p = New-Object System.Diagnostics.Process
 $p.StartInfo = $pinfo
 $p.Start() | Out-Null
@@ -60,9 +66,9 @@ Write-Host
 Write-Host "exit code: $( $p.ExitCode )"
 
 if ($stdout.Contains("vulnerable") -or $stderr.Contains("vulnerable")) {
-    Write-Host "log4j-finder: Achtung: betroffene log4j Versionen gefunden! Bitte Log-Dateien pruefen!"
+    Write-Host "Result: vulnerabilities have been found!"
     exit 1001
 } else {
-    Write-Host "log4j-finder: keine Funde"
+    Write-Host "Result: no vulnerabilities found."
     exit 0
 }
