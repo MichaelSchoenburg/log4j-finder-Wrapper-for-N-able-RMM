@@ -25,11 +25,11 @@
 $DownloadUrl = "https://github.com/fox-it/log4j-finder/releases/latest/download/log4j-finder.exe"
 $FolderRmm = "Fox-IT_Log4J-Finder_Script"
 $PathRmm = [System.IO.FileInfo]"C:\TSD.CenterVision\Software\_Scripts\$( $FolderRmm )"
-if (-not (Test-Path $PathRmm.DirectoryName)) {
-    New-Item -ItemType Directory -Name $FolderRmm -Path $PathRmm
+if (-not (Test-Path $PathRmm.FullPath)) {
+    New-Item -ItemType Directory -Path $PathRmm
 }
 $PathExe = "$( $PathRmm )\log4j-finder.exe"
-if (Test-Path $PathExe) {
+if (-not (Test-Path $PathExe)) {
     $AllProtocols = [System.Net.SecurityProtocolType]'Tls11,Tls12'
     [System.Net.ServicePointManager]::SecurityProtocol = $AllProtocols
     $Client = New-Object System.Net.WebClient
