@@ -25,7 +25,7 @@
 $DownloadUrl = "https://github.com/fox-it/log4j-finder/releases/latest/download/log4j-finder.exe"
 $FolderRmm = "Fox-IT_Log4J-Finder_Script"
 $PathRmm = [System.IO.FileInfo]"C:\TSD.CenterVision\Software\_Scripts\$( $FolderRmm )"
-if (-not (Test-Path $PathRmm.FullPath)) {
+if (-not (Test-Path $PathRmm.FullName)) {
     New-Item -ItemType Directory -Path $PathRmm
 }
 $PathExe = "$( $PathRmm )\log4j-finder.exe"
