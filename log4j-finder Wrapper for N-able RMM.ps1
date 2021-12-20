@@ -25,17 +25,16 @@
 $DownloadUrl = "https://github.com/fox-it/log4j-finder/releases/latest/download/log4j-finder.exe"
 $FolderRmm = "Fox-IT_Log4J-Finder_Script"
 $PathRmm = [System.IO.FileInfo]"$( $env:ProgramFiles )\Advanced Monitoring Agent\scripts\$( $FolderRmm )"
-
 if (-not (Test-Path $PathRmm.DirectoryName)) {
     New-Item -ItemType Directory -Name $FolderRmm -Path $PathRmm
 }
-
 $PathExe = [System.IO.FileInfo]"$( $env:ProgramFiles )\Advanced Monitoring Agent\scripts\Fox-IT_Log4J-Finder_Script\log4j-finder.exe"
-
-$AllProtocols = [System.Net.SecurityProtocolType]'Tls11,Tls12'
-[System.Net.ServicePointManager]::SecurityProtocol = $AllProtocols
-$Client = New-Object System.Net.WebClient
-$Client.DownloadFile($DownloadUrl, $PathExe)
+if (Test-Path $PathExe) {
+    $AllProtocols = [System.Net.SecurityProtocolType]'Tls11,Tls12'
+    [System.Net.ServicePointManager]::SecurityProtocol = $AllProtocols
+    $Client = New-Object System.Net.WebClient
+    $Client.DownloadFile($DownloadUrl, $PathExe)
+}
 
 $Drives = (Get-PSDrive -PSProvider FileSystem).where({$_.DisplayRoot -notlike "\\*"})
 
